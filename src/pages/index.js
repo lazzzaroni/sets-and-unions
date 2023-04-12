@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 function arrayToSet(array) {
   const result = [];
 
@@ -11,43 +13,90 @@ function arrayToSet(array) {
 }
 
 function union2(arr1, arr2) {
-  const result = arrayToSet(arr1);
-
-  for (const item of arr2) {
-    if (!result.includes(item)) {
-      result.push(item);
-    }
-  }
-
-  return result;
+  return arrayToSet(arr1.concat(arr2));
 }
 
-const arr1 = [1, 2, 3, 3, 4];
+const arr1 = [1, 2, 3, 3, 4, 9, 14, 23, 44, 34, 55];
 const arr2 = [1, 2, 4, 5, 1, 11, 7, 8];
 
-const setA = arrayToSet(arr1);
-const setB = arrayToSet(arr2);
-const united = union2(setA, setB);
+const united = union2(arr1, arr2);
 
 function Card({ array, title }) {
+  const [isUnion, setIsUnion] = useState(false);
+  const [numbers, setNumbers] = useState(arrayToSet(array));
+  const [input, setInput] = useState("");
+
+  useEffect(() => {
+    if (title != "Union") {
+      setIsUnion(true);
+    }
+  }, [title]);
+
+  function removeElement(element) {
+    const newArray = numbers.filter((_, i) => i != element);
+    setNumbers(newArray);
+  }
+
+  function updateNumbers(number) {
+    if (numbers.includes(parseInt(number))) {
+      alert("This number is already in Set");
+      setInput("");
+      return;
+    } else if (number.length == 0) {
+      return;
+    }
+    numbers.push(parseInt(number));
+    console.log(numbers);
+    setNumbers(numbers);
+    setInput("");
+  }
+
   return (
-    <section>
+    <section className="card">
       <header>
-        <h1>{title}</h1>
+        <h1 className="heading">{title}</h1>
       </header>
-      {array.map((item) => {
-        return <span key={item}>{item}&nbsp;</span>;
-      })}
+      {isUnion ? (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            updateNumbers(input);
+          }}
+          className="flex"
+        >
+          <label>
+            <input
+              className="input"
+              type="number"
+              value={input}
+              onChange={(e) => {
+                setInput(e.target.value);
+              }}
+              placeholder="Enter number"
+            />
+          </label>
+          <button className="submit">Add to Set</button>
+        </form>
+      ) : null}
+      <div className="flex">
+        {numbers.map((item, i) => (
+          <button className="button" key={i} onClick={() => removeElement(i)}>
+            {item}
+          </button>
+        ))}
+      </div>
     </section>
   );
 }
 
 export default function Home() {
   return (
-    <>
-      <Card array={setA} title={"Set A"} />
-      <Card array={setB} title={"Set B"} />
-      <Card array={united} title={"Union"} />
-    </>
+    <div className="container">
+      <div className="sets">
+        <Card array={arr1} title="Set A" />
+        <Card array={arr2} title="Set B" />
+      </div>
+      <Card array={united} title="Union" />
+    </div>
   );
 }
