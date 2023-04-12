@@ -17,13 +17,11 @@ function union2(arr1, arr2) {
 }
 
 const arr1 = [1, 2, 3, 3, 4, 9, 14, 23, 44, 34, 55];
-const arr2 = [1, 2, 4, 5, 1, 11, 7, 8];
+const arr2 = [5, 1, 11, 7, 8];
 
-const united = union2(arr1, arr2);
-
-function Card({ array, title }) {
+function Card({ set, title }) {
+  const [numbers, setNumbers] = set;
   const [isUnion, setIsUnion] = useState(false);
-  const [numbers, setNumbers] = useState(arrayToSet(array));
   const [input, setInput] = useState("");
 
   useEffect(() => {
@@ -46,7 +44,6 @@ function Card({ array, title }) {
       return;
     }
     numbers.push(parseInt(number));
-    console.log(numbers);
     setNumbers(numbers);
     setInput("");
   }
@@ -90,13 +87,17 @@ function Card({ array, title }) {
 }
 
 export default function Home() {
+  const setA = useState(arrayToSet(arr1));
+  const setB = useState(arrayToSet(arr2));
+  const united = useState(union2(setA[0], setB[0]).sort((a, b) => a - b));
+
   return (
     <div className="container">
       <div className="sets">
-        <Card array={arr1} title="Set A" />
-        <Card array={arr2} title="Set B" />
+        <Card set={setA} title="Set A" />
+        <Card set={setB} title="Set B" />
       </div>
-      <Card array={united} title="Union" />
+      <Card set={united} title="Union" />
     </div>
   );
 }
