@@ -20,6 +20,15 @@ export default function Home() {
         <Set numbers={setB} setNumbers={setSetB} title="Set B" />
       </div>
       <Union props={props} />
+      <footer className="footer">
+        <a
+          href="https://github.com/lazzzaroni/sets-and-unions"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Go to GitHub repo
+        </a>
+      </footer>
     </div>
   );
 }

@@ -281,3 +281,7 @@ a {
   overflow: hidden;
   margin: 0;
 }
+
+.footer {
+  margin-top: 5rem;
+}
